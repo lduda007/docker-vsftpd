@@ -17,16 +17,11 @@ else
     export LOG_STDOUT='Yes.'
 fi
 
-# Create home dir and update vsftpd user db:
-# mkdir -p "/home/vsftpd/${FTP_USER}"
-# chown -R ftp:ftp /home/vsftpd/
+if [ -f /etc/vsftpd/additional_users.txt ]; then
+	cp /etc/vsftpd/additional_users.txt /etc/vsftpd/virtual_users.txt
+fi
 
-if [ ! -f /etc/vsftpd/virtual_users.txt ]; then
-	echo -e "${FTP_USER}\n${FTP_PASS}" > /etc/vsftpd/virtual_users.txt
-fi
-if [ ! -s /etc/vsftpd/virtual_users.txt ]; then
-	echo -e "${FTP_USER}\n${FTP_PASS}" > /etc/vsftpd/virtual_users.txt
-fi
+echo -e "${FTP_USER}\n${FTP_PASS}" >> /etc/vsftpd/virtual_users.txt
 /usr/bin/db_load -T -t hash -f /etc/vsftpd/virtual_users.txt /etc/vsftpd/virtual_users.db
 
 # Set passive mode parameters:
