@@ -10,7 +10,8 @@ RUN yum -y update && yum clean all
 RUN yum install -y \
 	vsftpd \
 	db4-utils \
-	db4 && yum clean all
+	db4 \
+	iproute && yum clean all
 
 ENV USER_ID 1000
 ENV GROUP_ID 1000
@@ -30,6 +31,8 @@ ENV LOG_STDOUT **Boolean**
 ENV FILE_OPEN_MODE 0666
 ENV LOCAL_UMASK 077
 ENV REVERSE_LOOKUP_ENABLE YES
+ENV PASV_PROMISCUOUS NO
+ENV PORT_PROMISCUOUS NO
 
 COPY vsftpd.conf /etc/vsftpd/
 COPY vsftpd_virtual /etc/pam.d/
